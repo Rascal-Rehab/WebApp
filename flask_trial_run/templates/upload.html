@@ -1,0 +1,193 @@
+<a style='color:rgb(0, 0, 0)' href='/index' id=myButton>Return to Home</a>
+{% extends 'base.html' %}
+{% block content %}
+<body id="grad" style="font-size:18px; color:white">
+    <h1 style="text-align: center ; font-size: 36px"><u>GeoSpatial Distribution of Police Killings in the United States</u></h1>
+    <form>
+      <fieldset style='font-size: 16px'>
+        <legend><h2 style='text-align:center'>Introduction</h2></legend>
+        <p><span class='tab'></span>This project, a geospatial distribution of incidents of civilians killed by law enforcement officers across the United States, examines the GeoSpatial distribution of police killings and the associations between these incidents and various metrics. It is important to note that the base dataset upon which individual incidents of police killings are pulled from includes both incidents in which the law enforcement officer was found guilty and his or her actions unjustified, or was found innocent and his or her actions justified, as well as cases where the verdict had not yet been reached at the time of reporting. Included in these metrics are the populations of each county in which the incident took place, the gross domestic product per capita of the counties of incidence, as well as the racial composition of the victims of these incidents. After examining each distribution relative to these metrics, the results are then analyzed by various methods, and statistically supported conclusions are then drawn and discussed from these results. Throughout this project, I made every effort to report objectively and to only present the facts of this examination and analysis.</p>
+        <p style='text-align: center;'>All sources for all datasets are linked at the end of this page, as well as a link to my GitHub repository for this project and all code intrinsic.</p>
+
+      </fieldset><br>
+      <fieldset>
+        <legend><h2 style='text-align:center'>The Dataset: Examined</h2></legend>
+        <p><span class="tab"></span>The first question to be asked of any sample dataset used for analyzing characteristics of the population is whether or not the data is truly random and representative of the population itself.</p>
+        <p><span class="tab"></span>This boils down to three conditions of the sample dataset: the indiviudal samples of the dataset must be independent of one another; the dataset must be sufficiently large (common thresholds are in excess of 50 individual samples); and the data must be collected randomly.</p>
+        <p><span class="tab"></span>As to the first requirement, it is fair to assume that each case is independent of one another: it makes no logical sense to state that one police killing in Alabama, for instance, would increase the likelihood of a different police killing in Oregon.</p>
+        <p><span class="tab"></span>As to the second, we note that this dataset holds individual data concerning more than 8,429 aggregated incidents of police executions in the last 8 year span. This dataset is clearly large enough to provide a fair and accurate representation of the population.</p>
+        <p><span class="tab"></span>As for the final condition for statistically representative analysis of the sample dataset in respect to the population, we must ask if the dataset for this observational study was collected randomly. Since we can't compare this sample dataset to the population dataset, there is no viable method by which to prove that this sample is truly a random subset of the population data of citizen deaths at the hands of police officers. We are left to either assume randomness or to completely abandon the project: thus, we forge on with the assumption of randomness in data, though we must remember that this requirement is assumed, and may or may not be true.</p>
+      </fieldset><br>
+        <fieldset>
+        <legend><h2 style='text-align:center'>National Distribution</h2></legend>
+        <p><span class='tab'></span>True to the name of this project, we are first tasked with visualizing the distribution of police killings across the United States. </p>
+        <p><span class='tab'></span>This is done with MatPlotLib, as well as with data collected from various sources. The following graph displays the United States, as well as the incorporated Puerto Rican territory. The red markers present throughout the map represent the approximate locations of 8,429 reports of police killing civilians.</p>
+        <p><span class='tab'></span>Note that, because of discrepancies between the exact addresses that were provided within the dataset, it was not feasible to extract, correct, process, and plot each individual address. For this reason, the red markers shown are plotted on the geographic center of the counties in which the killings took place, as these values were the most precise locations that were available and uniform across each data point.</p>
+        <p><span class='tab'></span>Below are several options to restrict the frame of the graph in order to better view the true magnitude of these reports. Note that only the top two rows of buttons apply to this map.</p>
+        <div class='ImageBorder' style="width: 100%; height: {{ height }}; overflow:hidden;">
+          <image id=opac src="{{url_for('static',filename= filename)}}" alt= {{ alt }} float=center width=100%></div>
+          <br>
+          <form action="/upload" method="GET">
+        <div style='text-align: center'>
+            <input type ='radio' value='continental' name='region' checked='checked' id='continental'>
+            <label for='continental'>All</label><span class='half'></span>
+            <input type='radio' value='contiguous' name='region' id='contiguous'>
+            <label for='contiguous'>Contiguous</label><span class='half'></span>
+            <input type='radio' value='northeast' name='region' id='northeastern'>
+            <label for='northeastern'>Northeastern</label><span class='half'></span>
+            <input type='radio' value='southeast' name='region' id='southeastern'>
+            <label for='southeastern'>Southeastern</label><br><span class='half'></span>
+            <input type='radio' value='midwest' name='region' id='midwest'>
+            <label for='midwest'>Midwest</label><span class='half'></span>
+            <input type='radio' value='plains' name='region' id='plains'>
+            <label for='plains'>The Great Plains</label><span class='half'></span>
+            <input type='radio' value='pacific' name='region' id='pacific'>
+            <label for='pacific'>Pacific Coast</label><br>
+            <hr noshade>
+            <input type="radio" id="without" name="markers" value="unmarked" checked='checked'>
+            <label for="without">Without Markers</label><span class='half'></span>
+            <input type="radio" id="with" name="markers" value="marked"> 
+            <label for="with">With Markers</label><br>
+            <input type='submit'>
+        </div>
+        </form><br>
+        <p><span class="tab"></span>Understanding the geographic distribution of these killings, it is important to note that the stronger clusters of these events is likely due to population clusters. For this reason, I have appended the below graph, a colormap of the populations of each county in the United States, to help understand the density of the above killings relative to the populations of each area. The above two options on the last row, those corresponding to the presence of markers, will allow you to alter the below map based on your desire to see just the blank map with the colormap of population, or to see that map with the physical markers of these incidents of police killings present.</p><br>
+        <div class='ImageBorder' style="width: 100%; height: 600px; overflow: hidden;">
+          <image id=opac src="{{url_for('static',filename= mfile)}}" alt="National Distribution of police killings in America" float=center width=100%></div>
+        <br>
+          <p><span class="tab"></span>While it is evident that there is some loose correlation between the population and these events occuring - and much more clearly in the western most states - there appears to be a greater force at play. This can be further examined with a statistical examination: a histogram, which determines if there is any significant difference between the frequency of certain results, can be constructed to display the differences between the incidence of police executions as it relates to population.</p>
+          <p><span class="tab"></span>For this construction, we will set the normal distribution of populations across all US counties as the expected results, and then compare this histogram to a histogram of the population distribution of our subset of data - the subset being just those counties in which police executions have occured at least once according to our dataset. Please note that, in this histogram and the next one, the results are not stacked, but instead superimposed on top of each other, as the subsetted data will never be larger than the dataset it's drawn from.</p>
+          <div style="width:100%; height:935px; overflow:hidden;">
+            <image id=opac src="{{url_for('static',filename='HISTPOP.svg')}}" alt='Histogram showing the distributions of populations in US Counties' float=center width=100%>
+          </div><br>
+          <p><span class='tab'></span>This histogram displays that, while there is a large discrepancy in the distributions for counties with populations on the lower quarter of the spectrum shown, there is a very small discrepancy, if any, for the distributions of counties with populations past 200,000 individuals. This may, of course, be due to unequal reporting between more populous and less populous counties in our base dataset. Assuming that this isn't the case, though, we are left to conclude from this evidence that incidents of law enforcement officers killing civilians is more likely to occur in more populous counties; we may extrapolate from this statement that these incidents are more likely to occur in more urban counties - those that would inherently have greater populations. This conclusion is not a far reach from generally held beliefs of these incidents, as urban centers have historically had greater rates of crime and violent crime specifically.</p>
+          </fieldset>
+      <br>
+      <fieldset>
+        <legend><h2 style='text-align:center'>Examining Possible Correlations with GDP per Capita</h2></legend>
+        <p><span class="tab"></span>An obvious question that came to mind as I was working on this project was whether my sample dataset held any correlation between the quality of life within an area and the likelihood of civilian deaths by means of police. The metric used to quantify the quality of life was GDP per capita. This metric was chosen because of the ease of access to this information and the ability to break it down on a much smaller scale to analyze incidents on a county level.</p>
+        <p><span class="tab"></span>In order to explore this, I pulled public-domain data concerning the population estimates for 2018 and the GDP reports for counties for 2018. I then used these values, as well as the FIPS (Federal Information Processing Standards) for each county, to assign GDPPC values to each county on a GeoPandas plot, and assigned the GDPPC values to a colormap gradient. This graph is shown below. </p>
+        <div class='ImageBorder' style="width: 1050px; height: 525px; overflow: hidden;">
+        <image id=opac src="{{url_for('static',filename='contcounty_plt.svg')}}" alt="National Distribution of police killings in America" float=center width=1050></div><br>
+        <p><span class="tab"></span>Upon analysis, this illustration isn't able to display much information becuase of the pure magnitude of markers present. While it is possible to display this map without the markers, of course, that wouldn't be much help as it would be dificult to draw any supported conclusion from that map in conjunction with this one.</p>
+        <P><span class='tab'></span>To further analyze these results, I have constructed the following histogram of the dataset. This histogram illustrates the aforementioned metrics: the first distribution is the histogram showing the GDPPC of all counties in the United States, while the second shows the same illustration for only the counties in which police shootings were reported in this dataset.</P>
+        <div style="width:100%; height:925px; overflow:hidden;">
+          <image id=opac src="{{url_for('static',filename='HISTGDPPC.svg')}}" alt='Histogram showing the distributions of GDPPC values in US Counties' float=center width=100%>
+        </div><br>
+        <p><span class='tab'></span>After analyzing the histogram, it becomes apparent that the distributions follow the same general pattern, both without much deviation from the other, if any, save for the scaling of the two. This is expected, since our two datasets are of different sizes; the fact that each follows the same crests and troughs for the distribution of GDPPC, though, is clear evidence that the correlation between GDPPC and these incidents of police shootings is exceptionally low.</p>
+      
+      </fieldset>
+      <br>
+      <fieldset>
+        <legend><h2 style='text-align:center'>Examining Possible Correlations with Racial Identity</h2></legend>
+        <p><span class='tab'></span>The next association that comes to mind is whether police shootings are significantly skewed in any way past what we should expect to see relative to the racial identity or ethnicity of the victims of police killings. This can be done by calculating the percent-wise ethnic breakdown of police killings, and comparing this to what we expect to see. Assuming that there is no relationship between police killings and racial identity, we should expect to see a distribution of police killings that very closely resembles the racial composition of the United States population.</p>
+        <p><span class='tab'></span>To begin, we must calculate the United States population's racial composition. This step was completed using United States census data. The next step is to calculate the racial composition of our dataset.These two pie charts are shown below.</p>
+        <image id=opac src="{{url_for('static',filename = 'Rcomp_plt.svg')}}" alt="Pie Chart of the Racial Composition of America" height=500 width = 49.5%>
+        <image id=opac src="{{url_for('static',filename = 'Rkill_plt.svg')}}" alt="Pie Chart of the Racial Composition of American Police Shootings" height=500 width=49.5%><br><br>
+        <p><span class="tab"></span>Statistically, the significance of the differences between these two graphs comes from the relative chi-squared value of our observed dataset. This test serves as a metric for calculating how different one dataset is from an expected set of results; this is the statistical standard for this kind of comparison. It's fair to say that we should expect there to be very little deviation from the statistics representing the United States when talking about any subset of this data: That is to say, if we assume that police killings in America have no connection or correlation to the race of the victims, then we should expect to see the racial composition of this set of individuals killed by police to have the same or a similar racial composition to the population data is was drawn from. We will perform this test at a 99% confidence level - if you're unfamiliar with statistical analysis then the significance of that value will be explained shortly.</p><br>
+        <div>
+          <table style="width:100%">
+            <tr>
+              <th>Race</th>
+              <th>Expected Statistics</th> 
+              <th>Observed Statistics</th>
+              <th>Expected Count</th>
+              <th>Observed Count</th>
+              <th>Chi-Squared Value</th>
+            </tr>
+            <tr>
+              <td>White</td>
+              <td>65.2%</td> 
+              <td>45.5%</td>
+              <td>4900</td>
+              <td>3417</td>
+              <td>448.834</td>
+            </tr>
+            <tr>
+              <td>Black</td>
+              <td>11.4%</td> 
+              <td>26.0%</td>
+              <td>857</td>
+              <td>1957</td>
+              <td>1411.90</td>
+            </tr>
+            <tr>
+              <td>Hispanic</td>
+              <td>15.8%</td> 
+              <td>17.8%</td>
+              <td>1187</td>
+              <td>1338</td>
+              <td>19.2089</td>
+            </tr>
+            <tr>
+              <td>Asian</td>
+              <td>5.0%</td> 
+              <td>1.6%</td>
+              <td>376</td>
+              <td>120</td>
+              <td>174.298</td>
+            </tr>
+            <tr>
+              <td>Pacific Islander</td>
+              <td>0.2%</td> 
+              <td>0.6%</td>
+              <td>15</td>
+              <td>42</td>
+              <td>48.6000</td>
+            </tr>
+            <tr>
+              <td>Other</td>
+              <td>2.4%</td> 
+              <td>8.5%</td>
+              <td>180</td>
+              <td>641</td>
+              <td>1180.67</td>
+            </tr>
+            <tr>
+              <td>Sums:</td>
+              <td>100%</td>
+              <td>100%</td>
+              <td>7515</td>
+              <td>7515</td>
+              <td><b>3283.51</b></td>
+            </tr>
+          </table>
+          </div><br>
+        <p><span class='tab'></span>The last column of the table shows the individual calculations of the chi-squared value. The formula for this is given below. The last row of that column is the true value of chi-squared for this specific dataset. Chi-square serves as an indicator for how much our observed data strays from the expected data. A value close to zero indicates that the observed data is closely associated with what we should expect to see, while a value further from zero indicates that the observed data counts are not a representation of what we should expect to see.</p>
+        <div class='ImageBorder' style="width:100%; height:100px; overflow:hidden;text-align:center">
+          <image id=opac src='{{url_for("static",filename="Chi.png")}}' alt='The formula for calculating a Chi-Square Value'></image></div><br>
+        <p><span class='tab'></span>To analyze the results shown, we need to understand that the calculations shown in the table above, while they return a chi-squared value, are not able to define any correlation on it's own. We must first calculate our degrees of freedom. This value is defined as one less than the number of categories being compared. In our case, this value is (6-1)=5.</p>
+        <p><span class='tab'></span>We must also calculate the p-value. A p-value is essentially the probability of obtaining a set of observed values under the assumption that they come from a set of data which follows the expected patterns of distribution. Earlier, it was mentioned that we would perform this test at a 99% confidence level. This means that we will be able to state our conclusion as a representation of the entire population of these incidencts with 99% confidence. At a 99% confidence level, we have a p-value threshold of 0.01 or 1%. In order to make any conclusion about the statistical significance of our observed values in relation to the expected values, we must compare our calculated p-value to this threshold value.</p>
+        <p><span class='tab'></span>We can calculate our result's p-value with the chi-square value and our degrees of freedom. This calcuation is pretty complex, and I'll save you the time of reading through the formulae behind it, though I will provide a link below if you're curious as to the inner workings of this calculation. Because of the magnitude of our chi-square value, we have a p-value of less than 0.00001. This would indicate that, for any reasonable confidence level (ours included), we are able to conclude that there exists some definite statistically significant difference between our observed and expected results.</p>
+        <p><span class='tab'></span>Our conclusion of a definite statistically signficant difference indicates that our initial hypothesis that there exists no relationship between police killings and racial identity is indeed false.</p>
+        <p><span class='tab'></span>It is important to note here that the nature of this statistical study is only an observational study based on past data. This conclusion does not confirm nor deny any causal relationship between racial identity and police killings, only that there exists some definite correlation between them.</p>
+      </fieldset>
+      </form>
+      <br>
+      <fieldset>
+        <legend><h2 style='text-align:center'>Conclusions</h2></legend>
+        <p><span class='tab'></span>The results of each section and the analyses within show that, in the order in which they were presented, there is evidence that there exists a correlation between the population of a county and the incidence of police-perpetuated killings; that there is little, if any, evidence of a correlation existing between the GDPPC of a region and the incidence of police-perpetuated killings; and that there is undeniable evidence that there exists a statistically significant correlation between racial identity and the incidence of police-perpetuated killings.</p>
+        <p><span class='tab'></span>That being said, I will reiterate that these conclusions are based off of the assumption that these datasets were collected in a truly random manner. There is not sufficient evidence that this is the case, nor is there sufficient evidence present that it is not. This is purely an assumption, and one made necessary for the statistical analysis of this project.</p>
+      </fieldset>
+      <br>
+      <fieldset style='text-align: center; font-size: 16px'>
+        <legend><h2 style='text-align:center'>Author's Note</h2></legend>
+        <p>This project is meant to display prowess of data manipulation, visualization, and the ability to create WebGUI's to display the results of these visualizations. Additionally, this project highlights my understanding of the several packages of Python used in this project from start to finish, including: Pandas, MatPlotLib, ScipyStats, GeoPandas, GeoPy, and Flask. This project, in its entirety from data collection to the uploading of the final product, was completed in a span of approximately 3 weeks.</p>
+      </fieldset><br>
+    <fieldset>
+      <legend><h2 style='text-align:center'>Attributions</h2></legend>
+      <p>The source code for this project is available on GitHub at the following link:</p>
+      <p><span class="tab"></span><href>My GitHub Account Link</href>
+      <p>This project was made possible by the following datasets:</p>
+      <a style='color:black' href=https://www.bea.gov/data/gdp/gdp-county-metro-and-other-areas'><span class='tab'></span>GDP Data</a><br>
+      <a style='color:black' href='https://simplemaps.com/data/us-cities'><span class='tab'></span>Latitude and Longitude Data</a><br>
+      <a style='color:black' href='https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html'><span class='tab'></span>State and County Geometry Data</a><br>
+      <a style='color:black' href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/sc/home/?cid=nrcs143_013697'><span class='tab'>FIPS Data (Identifying codes for all counties)</span></a><br>
+      <a style='color:black' href='https://www.census.gov/data/datasets/time-series/demo/popest/2010s-counties-total.html#par_textimage_70769902'><span class='tab'>Population Data</span></a><br>
+      <a style='color:black' href='https://data.healthcare.gov/dataset/Geocodes-USA-with-Counties/52wv-g36k'><span class='tab'>Geocode Data (Location data for all counties)</span></a><br>
+      <a style='color:black' href='https://www.kaggle.com/jpmiller/police-violence-in-the-us/activity'><span class='tab'>Original Datasets of Incidence Reports</span></a><br><br>
+      <p>Curious to see the math behind the P-Value from earlier?</p>
+      <a style='color:black' href='https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/9-exact-probability-test'><span class='tab'></span>P-Value Calculation Explanation</a>
+    </fieldset>
+  </body>
+{% endblock %}
