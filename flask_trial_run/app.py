@@ -1,34 +1,16 @@
 from flask import Flask, render_template, flash, redirect, Markup, request
 from config import Config
-from forms import LoginForm
 
 app = Flask(__name__)  
 app.config.from_object(Config)
 
-name="To whom it may concern"
-
-@app.route('/' or '/login', methods= ['GET','POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(form.username.data, form.remember_me.data))
-        global name
-        name = str("Dear " + str(form.username.data))
-        return redirect('/index')
-    return render_template('login.html', title='Log in', form=form)
-
-@app.route("/index")
+@app.route('/', methods= ['GET','POST'])
 def firstpage():
     return render_template("index.html",title='Home')
 
-# @app.route("/blog")
-# def blogpage():
-#     return render_template("blog.html", title='blog', posts=posts)
-
 @app.route("/Letter")
 def MyResume():
-    global name
-    return render_template("letter.html",title='Reid Taylor', name=name)
+    return render_template("letter.html",title='Reid Taylor')
 
 @app.route("/Resume")
 def MyLetter():
@@ -78,4 +60,4 @@ def upload():
     return render_template('upload.html', title='Data Science', filename=filename, height=height, alt=alt, mfile=mfile)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

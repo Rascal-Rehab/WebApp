@@ -11,6 +11,6 @@ services:
       - type: bind
         source: ./
         target: /usr/src/app/
-    command: python /usr/src/app/Web.py
+    command: python /usr/src/app/app.py
     ports:
       - "5000:5000"
